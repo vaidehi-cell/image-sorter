@@ -5,34 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Sorter</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <center>
-        <form action="/submit" method="POST" enctype="multipart/form-data" >
-            <h1>Welcome to Image Sorter!</h1>
-            <br>
-            Select your folder of images to be sorted here: <br>
-            <input type="file" name="ctrl" id="ctrl" webkitdirectory directory multiple required/>
-            <br>
-            <input type="number" name="threshold" placeholder="Threshold Value"> <br>
-            <button type="submit">Less Go!</button>
-        </form>
-        <br>
-        <br>
-        {% if download %}
-        <form action="/download_clear" method="GET">
-            Click here to download the folder of clear images:
-            <br><button type="submit">Download</button>
-        </form>
-        <br>
-        <form action="/download_blur" method="GET">
-            Click here to download the folder of blur images:
-            <br><button type="submit">Download</button>
-        </form>
-        {% endif %}
-        {% if message %}
-            {{ message }}
-        {% endif %}
-    </center>
+    <center><h1 class="main-heading">WELCOME TO IMAGE SORTER</h1></center>
+    <div class="container">
+        <center>
+            <form action="/submit" method="POST" enctype="multipart/form-data" >
+                <br>
+                <div class="sub-heading">Select your folder of images to be sorted here: </div><br>
+                <input type="file" name="ctrl" id="ctrl" class="btn" webkitdirectory directory multiple required/>
+                <br>
+                <input type="number" class="input-btn" name="threshold" placeholder="Threshold Value" style="margin-bottom: 0;">
+                <div style="font-size: 0.7rem; margin-bottom: 0.3rem;">(optional)</div> 
+                <button type="submit" class="btn">Less Go!</button>
+            </form>
+            {% if download %}
+            <form action="/download_clear" method="GET">
+                Click here to download the folder of clear images:
+                <br><button type="submit" class="btn" style="margin: 0.5rem 0;">Download</button>
+            </form>
+            <form action="/download_blur" method="GET">
+                Click here to download the folder of blur images:
+                <br><button type="submit" class="btn" style="margin: 0.5rem 0 0 0">Download</button>
+            </form>
+            {% endif %}
+            {% if message %}
+                {{ message }}
+            {% endif %}
+        </center>
+    </div>
 </body>
 </html>
