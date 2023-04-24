@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Sorter</title>
+</head>
+<body>
+    <center>
+        <form action="/submit" method="POST" enctype="multipart/form-data" >
+            <h1>Welcome to Image Sorter!</h1>
+            <br>
+            Select your folder of images to be sorted here: <br>
+            <input type="file" name="ctrl" id="ctrl" webkitdirectory directory multiple required/>
+            <br>
+            <input type="number" name="threshold" placeholder="Threshold Value"> <br>
+            <button type="submit">Less Go!</button>
+        </form>
+        <br>
+        <br>
+        {% if download %}
+        <form action="/download_clear" method="GET">
+            Click here to download the folder of clear images:
+            <br><button type="submit">Download</button>
+        </form>
+        <br>
+        <form action="/download_blur" method="GET">
+            Click here to download the folder of blur images:
+            <br><button type="submit">Download</button>
+        </form>
+        {% endif %}
+        {% if message %}
+            {{ message }}
+        {% endif %}
+    </center>
+</body>
+</html>
