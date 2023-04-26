@@ -70,21 +70,17 @@ def submit():
         if request.method == "POST":
             # if required input is not found
             if 'ctrl' not in request.files:
-                # Show a flash message and redirect to the same page
-                flash('No file part')
                 return redirect(request.url)
             else:
                 data = request.files.getlist('ctrl')
-                flash('got the files')
                 # If user has entered a valid threshold, use it else set threshold to default value 81
                 try:
                     threshold = int(request.form['threshold'])
                 except:
                     threshold = 81
-                flash('set the threshold')
                 # cLear all the pre-existing files: to minimise the amount of data stored at the server
                 clear_folders()  
-                flash('cleared folders')
+                
                 # iterate through the input files
                 for file in data:
                     
@@ -92,40 +88,31 @@ def submit():
                     if file and allowed_file(file.filename):
                         filename = secure_filename(file.filename)
                         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
                     # if file invalid, return error message
                     else:
                         return render_template('index.html', download = False, message='Invalid file format!')
-                flash('saved files')
+                
                 # iterate through the input images
                 for file in data:
                     filename = secure_filename(file.filename)
-
                     # read file as image using cv2
                     image = cv2.imread(app.root_path + '/' + app.config['UPLOAD_FOLDER'] +'/'+ filename)
-                    # if image:
-                    flash('took image in opencv')
                     # convert into grayscale image
                     imagebw = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                    flash('converted to greyscale')
                     # finds focus measure of the image
                     ''' Focus measure is the degree of sharpness of an image i.e., so higher focus measure, more clear image.
                     Focus measure is calculated by finding gradient of gaussian filter or a laplacian filter on an image. 
                     Here, we use Laplacian filter. '''
                     focus_measure = cv2.Laplacian(imagebw, cv2.CV_64F).var() 
-                    flash('calculated focus measure')
                     # If focus measure < threshold, the image is blur, so save in blurred folder
                     if focus_measure < threshold: 
                         cv2.imwrite(app.root_path + '/image_upload' + './blurred/' + filename, image) 
-                        
                     # If focus measure >= threshold, the image is clear, so save in clear folder
                     else:
                         cv2.imwrite(app.root_path + '/' + './clear/' + filename, image) 
-                    flash('saved images')
             # Return the home page with download option allowed 
             return render_template('index.html', download = True)
         else:
-            
             # Return the home page with download option not allowed 
             return render_template('index.html', download = False)
     except Exception as e:
@@ -138,14 +125,11 @@ def download_blur():
     # if the request method is post, do not allow download
     if request.method == 'POST':
         return render_template('index.html', download = False)
-
     # if the request method is GET
     else:
         dir_name = os.path.join(app.root_path, app.config['BLURRED'])
-
         # Make a zip archive of blurred folder
         shutil.make_archive(dir_name, 'zip', dir_name)
-        flash('zipped folder')
         # Download zip archive of blurred folder
         return send_file(dir_name + '.zip', as_attachment = True)
 
@@ -156,14 +140,11 @@ def download_clear():
     # if the request method is post, do not allow download
     if request.method == 'POST':
         return render_template('index.html', download = False)
-
     # if the request method is GET
     else:
         dir_name = os.path.join(app.root_path, app.config['CLEAR'])
-
         # Make a zip archive of clear folder
         shutil.make_archive(dir_name, 'zip', dir_name)
-        flash('zipped folder')
         # Download zip archive of clear folder
         return send_file(dir_name + '.zip', as_attachment = True)
 
