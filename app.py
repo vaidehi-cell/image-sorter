@@ -102,9 +102,9 @@ def submit():
                     filename = secure_filename(file.filename)
 
                     # read file as image using cv2
-                    image = cv2.imread(app.config['UPLOAD_FOLDER'] +'\\'+ filename)
-                    if image:
-                        flash('took image in opencv')
+                    image = cv2.imread(app.root_path + '\\' + app.config['UPLOAD_FOLDER'] +'\\'+ filename)
+                    # if image:
+                    flash('took image in opencv')
                     # convert into grayscale image
                     imagebw = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     flash('converted to greyscale')
@@ -116,11 +116,11 @@ def submit():
                     flash('calculated focus measure')
                     # If focus measure < threshold, the image is blur, so save in blurred folder
                     if focus_measure < threshold: 
-                        cv2.imwrite('./blurred/' + filename, image) 
+                        cv2.imwrite(app.root_path + '\\' + './blurred/' + filename, image) 
                         
                     # If focus measure >= threshold, the image is clear, so save in clear folder
                     else:
-                        cv2.imwrite('./clear/' + filename, image) 
+                        cv2.imwrite(app.root_path + '\\' + './clear/' + filename, image) 
                     flash('saved images')
             # Return the home page with download option allowed 
             return render_template('index.html', download = True)
