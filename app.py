@@ -103,7 +103,8 @@ def submit():
 
                     # read file as image using cv2
                     image = cv2.imread(app.config['UPLOAD_FOLDER'] +'\\'+ filename)
-                    flash('took image in opencv')
+                    if image:
+                        flash('took image in opencv')
                     # convert into grayscale image
                     imagebw = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     flash('converted to greyscale')
